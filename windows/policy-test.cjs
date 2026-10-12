@@ -1,0 +1,8 @@
+const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
+const handlers={},sessionHandlers={};let windowOptions,permission,open;
+class FakeWindow{constructor(options){windowOptions=options;this.webContents={setWindowOpenHandler:fn=>open=fn,on:(name,fn)=>handlers[name]=fn};}loadURL(url){assert.equal(url,'https://radhamovies.netlify.app/');}}
+vm.runInNewContext(fs.readFileSync(__dirname+'/main.cjs','utf8'),{URL,require:()=>({app:{whenReady:()=>({then:fn=>fn()}),on(){}},BrowserWindow:FakeWindow,session:{defaultSession:{setPermissionRequestHandler:fn=>permission=fn,on:(name,fn)=>sessionHandlers[name]=fn}}})});
+assert.deepEqual(JSON.parse(JSON.stringify(open({url:'https://ads.example'}))),{action:'deny'});
+function prevented(fn,...args){let blocked=false;fn({preventDefault(){blocked=true}},...args);return blocked;}
+assert(prevented(handlers['will-navigate'],'https://ads.example'));assert(!prevented(handlers['will-navigate'],'https://radhamovies.netlify.app/'));assert(prevented(handlers['will-navigate'],'https://radhamovies.netlify.app.evil.example/'));
+assert(prevented(handlers['will-redirect'],'https://ads.example',false,true));assert(!prevented(handlers['will-redirect'],'https://vidy.st',false,false));assert(prevented(sessionHandlers['will-download']));assert.equal(windowOptions.webPreferences.nodeIntegration,false);assert.equal(windowOptions.webPreferences.sandbox,true);permission(null,'camera',result=>assert.equal(result,false));console.log('PASS: window denial, navigation/redirect policy, download denial, renderer isolation, permission denial');

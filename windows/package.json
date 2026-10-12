@@ -1,0 +1,1 @@
+{"name":"radha-movies","version":"1.0.0","description":"Radha Movies by Diwash Bhatta","author":"Diwash Bhatta","main":"main.cjs","private":true,"scripts":{"start":"electron .","package":"electron-packager . \"Radha Movies\" --platform=win32 --arch=x64 --out=build --overwrite"},"devDependencies":{"electron":"latest","@electron/packager":"latest"}}
