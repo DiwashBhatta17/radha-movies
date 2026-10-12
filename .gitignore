@@ -5,3 +5,4 @@ local.properties
 .netlify/
 *.keystore
 *.jks
+windows/player-controls.js

@@ -1,0 +1,16 @@
+const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
+const handlers={},sent=[];
+const parent={postMessage:(data,origin)=>sent.push({data,origin})};
+const video={currentTime:120,duration:600,readyState:4,paused:false};
+const window={top:{},parent,addEventListener:(name,fn)=>handlers[name]=fn};
+const document={querySelectorAll:()=>[video],exitFullscreen:()=>{throw Error('Seeking must not leave fullscreen');}};
+vm.runInNewContext(fs.readFileSync(__dirname+'/player-controls.js','utf8'),{window,document});
+const message=(seconds,origin='https://radhamovies.netlify.app',source=parent)=>handlers.message({source,origin,data:{type:'RADHA_PLAYER_SEEK',seconds}});
+message(10);assert.equal(video.currentTime,130);message(-10);assert.equal(video.currentTime,120);assert.equal(video.paused,false);
+message(10,'https://ads.example');message(10,'https://radhamovies.netlify.app',{});message(Infinity);message(121);assert.equal(video.currentTime,120);
+video.currentTime=5;message(-10);assert.equal(video.currentTime,0);video.currentTime=599;message(10);assert.equal(video.currentTime,599.9);
+video.currentTime=100;let stopped=0;handlers.keydown({key:'ArrowRight',target:{tagName:'VIDEO'},preventDefault(){stopped++;},stopImmediatePropagation(){stopped++;}});assert.equal(video.currentTime,110);assert.equal(stopped,2);
+handlers.keydown({key:'ArrowRight',target:{tagName:'INPUT'}});assert.equal(video.currentTime,110);
+video.paused=true;message(-10);assert.equal(video.paused,true);assert.equal(video.currentTime,100);
+assert(sent.every(s=>s.origin==='https://radhamovies.netlify.app'));
+console.log('PASS: seek +/-10 without reload/fullscreen exit, clamp bounds, paused state, origin/source validation, keyboard control');

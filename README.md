@@ -6,7 +6,7 @@ Website: https://radhamovies.netlify.app/
 
 ## Downloads
 
-[Download the latest preview release](https://github.com/DiwashBhatta17/radha-movies/releases/tag/v1.0.0-preview): Android APK and Windows x64 portable ZIP. These are preview builds; platform-specific verification limits are listed below.
+[Download the latest preview release](https://github.com/DiwashBhatta17/radha-movies/releases/tag/v1.0.1-preview): Android APK and Windows x64 portable ZIP. These are preview builds; platform-specific verification limits are listed below.
 
 ## Android
 
@@ -14,7 +14,7 @@ Transfer `Radha-Movies-Android.apk` to an Android 8 or newer phone and open it t
 
 The app loads the live website and rejects popup windows, external top-level navigation, and player downloads. It requires an internet connection.
 
-In fullscreen, swipe near the left edge to adjust brightness or near the right edge to adjust media volume. Double-tap left/right to request a 10-second seek. Seeking uses the provider's start-position option, reloads playback, and exits fullscreen. It requires a recent progress event. Gestures have compiled but have not been verified on a physical Android device.
+In fullscreen, swipe near the left edge to adjust brightness or near the right edge to adjust media volume. Double-tap left/right to request a 10-second seek. Seeking uses the video already playing and preserves fullscreen. Android System WebView must support document-start scripts; keep it updated. Fullscreen automatically opens in landscape, with Rotate and Exit controls. Gestures have compiled but have not been verified on a physical Android device.
 
 ## Windows
 
@@ -26,7 +26,7 @@ Extract `Radha-Movies-Windows.zip` completely, then run `Radha Movies.exe` insid
 - You're watching row with saved progress and season/episode values supplied by the player.
 - Recommendations related to up to three recently watched titles, excluding titles in your history.
 - Automatic next episode through the provider's documented option.
-- Manual 30/60/90-second intro skip. It reloads the external player; automatic intro boundaries are unavailable.
+- Manual 30/60/90-second skip inside the apps without reloading; automatic intro boundaries are unavailable. In the website, use the player’s own seek controls.
 - Audio and subtitle selections remain in the external player's menu. Dubbed tracks and subtitles depend on the stream.
 - Small footer signature.
 
@@ -47,3 +47,9 @@ Android: install JDK 17 and Android SDK 35 with Build Tools 35.0.0. Create `andr
 Windows: from `windows/`, run `npm ci`, `node policy-test.cjs`, then `npm run package`. Node and dependency versions are recorded in package-lock.json. The existing ZIP is a portable x64 Windows build, not a signed installer.
 
 Verification: Android compilation, APK signature/package metadata, search/progress/parser unit tests, Windows popup/navigation policy tests, live Netlify responses, live recommendation results, and browser playback progress were checked. Reopening a title was verified to pass the stored resume time to the provider. Provider-driven end-of-episode transitions, physical-phone gestures, and Windows video playback were not end-to-end verified.
+
+## 1.0.1 fullscreen and seeking fixes
+
+Windows now permits fullscreen for the trusted Radha Movies and Vidy origins, with F11 and Escape support. Android removes fullscreen padding, hides system bars, opens in landscape, and restores the prior orientation on exit. Native 10-second seek controls change the existing video position instead of rebuilding the iframe. Popup blocking remains enabled.
+
+Tests: `node windows/prepare.cjs`, `node windows/policy-test.cjs`, `node native/player-controls.test.cjs`, and Android `gradlew.bat testDebugUnitTest`. Actual provider playback still needs verification on a physical phone and Windows desktop.
