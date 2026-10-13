@@ -28,15 +28,11 @@ public class FullscreenTest {
       assertEquals(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE,activity.getRequestedOrientation());
       assertEquals(0,root.getPaddingTop());assertEquals(0,root.getPaddingBottom());assertNotNull(video.getParent());
       assertTrue((activity.getWindow().getAttributes().flags&WindowManager.LayoutParams.FLAG_FULLSCREEN)!=0);
-      assertNotNull(findButton(root,"Rotate"));assertNotNull(findButton(root,"Exit"));
-      activity.getResources().getConfiguration().orientation=android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-      findButton(root,"Rotate").performClick();assertEquals(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT,activity.getRequestedOrientation());
-      activity.getResources().getConfiguration().orientation=android.content.res.Configuration.ORIENTATION_PORTRAIT;
-      findButton(root,"Rotate").performClick();assertEquals(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE,activity.getRequestedOrientation());
+      assertNull(findButton(root,"Rotate"));assertNull(findButton(root,"Exit"));
       activity.onBackPressed();assertEquals(1,exits[0]);assertEquals(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,activity.getRequestedOrientation());
       assertEquals(1,root.getChildCount());assertEquals(0,activity.getWindow().getAttributes().flags&WindowManager.LayoutParams.FLAG_FULLSCREEN);
       chrome.onHideCustomView();assertEquals(1,exits[0]);
-      chrome.onShowCustomView(new FrameLayout(activity),()->exits[0]++);findButton(root,"Exit").performClick();assertEquals(2,exits[0]);
+      chrome.onShowCustomView(new FrameLayout(activity),()->exits[0]++);chrome.onHideCustomView();assertEquals(2,exits[0]);
     }
   }
   @Test public void popupDenialDoesNotRejectFullscreen(){

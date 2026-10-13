@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
 const handlers={},sessionHandlers={};let windowOptions,permission,checkPermission,open,fullscreen=false;
-class FakeWindow{constructor(options){windowOptions=options;this.webContents={getURL:()=> 'https://radhamovies.netlify.app/',setWindowOpenHandler:fn=>open=fn,on:(name,fn)=>handlers[name]=fn};}loadURL(url){assert.equal(url,'https://radhamovies.netlify.app/');}setFullScreen(value){fullscreen=value;}isFullScreen(){return fullscreen;}}
+class FakeWindow{constructor(options){windowOptions=options;this.webContents={getURL:()=> 'https://radhamovies.netlify.app/',setWindowOpenHandler:fn=>open=fn,on:(name,fn)=>handlers[name]=fn};}loadURL(url){assert.equal(new URL(url).origin,'https://radhamovies.netlify.app');assert.equal(new URL(url).searchParams.get('appVersion'),'1.0.2');}setFullScreen(value){fullscreen=value;}isFullScreen(){return fullscreen;}}
 let injected=0,frameURL='https://vidy.st/movie/557';
 const electron={webFrameMain:{fromId:()=>({url:frameURL,executeJavaScript:()=>{injected++;return Promise.resolve();}})},app:{whenReady:()=>({then:fn=>fn()}),on(){}},BrowserWindow:FakeWindow,session:{defaultSession:{setPermissionCheckHandler:fn=>checkPermission=fn,setPermissionRequestHandler:fn=>permission=fn,on:(name,fn)=>sessionHandlers[name]=fn}}};
 vm.runInNewContext(fs.readFileSync(__dirname+'/main.cjs','utf8'),{URL,__dirname,require:name=>name==='electron'?electron:require(name)});

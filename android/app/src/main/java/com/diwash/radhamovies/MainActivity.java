@@ -8,7 +8,7 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
+
 import android.net.Uri;
 import android.view.*;
 import android.webkit.*;
@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
         WebSettings settings=web.getSettings();settings.setJavaScriptEnabled(true);settings.setDomStorageEnabled(true);
         settings.setSupportMultipleWindows(true);settings.setJavaScriptCanOpenWindowsAutomatically(false);
         settings.setAllowFileAccess(false);settings.setAllowContentAccess(false);settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-        settings.setMediaPlaybackRequiresUserGesture(true);settings.setUserAgentString(settings.getUserAgentString()+" RadhaMoviesAndroid/1.0");
+        settings.setMediaPlaybackRequiresUserGesture(true);settings.setUserAgentString(settings.getUserAgentString()+" RadhaMoviesAndroid/1.0.2");
         CookieManager.getInstance().setAcceptThirdPartyCookies(web,true);
         installPlayerControls();
         web.setWebViewClient(new WebViewClient(){
@@ -64,19 +64,15 @@ public class MainActivity extends Activity {
                 if(custom!=null){callback.onCustomViewHidden();return;}previousOrientation=getRequestedOrientation();custom=view;customCallback=callback;
                 root.setPadding(0,0,0,0);
                 full=new FrameLayout(MainActivity.this);full.setBackgroundColor(Color.BLACK);full.addView(view,new FrameLayout.LayoutParams(-1,-1));root.addView(full,new FrameLayout.LayoutParams(-1,-1));
-                hint=new TextView(MainActivity.this);hint.setTextColor(Color.WHITE);hint.setBackgroundColor(0xAA101111);hint.setPadding(28,18,28,18);hint.setText("Swipe left edge: brightness · right edge: volume");
+                hint=new TextView(MainActivity.this);hint.setTextColor(Color.WHITE);hint.setBackgroundColor(0xAA101111);hint.setPadding(28,18,28,18);hint.setVisibility(View.INVISIBLE);
                 FrameLayout.LayoutParams hp=new FrameLayout.LayoutParams(-2,-2,Gravity.TOP|Gravity.CENTER_HORIZONTAL);full.addView(hint,hp);hint.postDelayed(()->{if(hint!=null)hint.setVisibility(View.INVISIBLE);},4000);
-                LinearLayout actions=new LinearLayout(MainActivity.this);
-                Button rotate=new Button(MainActivity.this);rotate.setText("Rotate");rotate.setContentDescription("Rotate fullscreen video");rotate.setOnClickListener(v->setRequestedOrientation(getResources().getConfiguration().orientation==Configuration.ORIENTATION_LANDSCAPE?ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT:ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE));actions.addView(rotate);
-                Button close=new Button(MainActivity.this);close.setText("Exit");close.setContentDescription("Exit fullscreen");close.setOnClickListener(v->exitFull());actions.addView(close);
-                full.addView(actions,new FrameLayout.LayoutParams(-2,-2,Gravity.TOP|Gravity.END));
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
                 setFullscreenBars(true);
             }
             @Override public void onHideCustomView(){exitFull();}
         });
         web.setDownloadListener((url,ua,disposition,type,length)->Toast.makeText(this,"Downloads from the player are blocked.",Toast.LENGTH_SHORT).show());
-        web.loadUrl(HOME);
+        web.loadUrl(HOME+"?appVersion=1.0.2");
     }
     private void setFullscreenBars(boolean enabled){
         if(enabled)getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

@@ -3,7 +3,7 @@ android {
     namespace 'com.diwash.radhamovies'
     compileSdk 35
     sourceSets { main { assets.srcDirs += '../../native' } }
-    defaultConfig { applicationId 'com.diwash.radhamovies'; minSdk 26; targetSdk 35; versionCode 2; versionName '1.0.1' }
+    defaultConfig { applicationId 'com.diwash.radhamovies'; minSdk 26; targetSdk 35; versionCode 3; versionName '1.0.2' }
     testOptions { unitTests { includeAndroidResources = true; all { if(System.getProperty('robolectric.dependency.repo.url')) systemProperty 'robolectric.dependency.repo.url', System.getProperty('robolectric.dependency.repo.url') } } }
 }
 dependencies { implementation 'androidx.webkit:webkit:1.12.1'; testImplementation 'junit:junit:4.13.2'; testImplementation 'org.robolectric:robolectric:4.14.1' }

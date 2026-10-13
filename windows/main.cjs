@@ -7,7 +7,7 @@ app.whenReady().then(()=>{
   session.defaultSession.setPermissionRequestHandler((contents,permission,callback,details)=>callback(allowPermission(contents,permission,details?.requestingUrl)));
   session.defaultSession.setPermissionCheckHandler((contents,permission,requestingOrigin)=>allowPermission(contents,permission,requestingOrigin));
   session.defaultSession.on('will-download',event=>event.preventDefault());
-  const win=new BrowserWindow({width:1280,height:840,minWidth:420,minHeight:600,title:'Radha Movies',fullscreenable:true,autoHideMenuBar:true,backgroundColor:'#101111',webPreferences:{nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true}});
+  const win=new BrowserWindow({width:1280,height:840,minWidth:420,minHeight:600,title:'Radha Movies',fullscreenable:true,autoHideMenuBar:true,icon:path.join(__dirname,'icon.ico'),backgroundColor:'#080808',webPreferences:{nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true}});
   let htmlFullscreen=false;
   win.webContents.on('enter-html-full-screen',()=>{htmlFullscreen=true;});
   win.webContents.on('leave-html-full-screen',()=>{htmlFullscreen=false;});
@@ -29,6 +29,6 @@ app.whenReady().then(()=>{
     if(!['https://vidy.st','https://www.vidy.st'].includes(origin))return;
     frame.executeJavaScript(playerControls).catch(()=>{});
   });
-  win.loadURL(HOME);
+  win.loadURL(HOME+'?appVersion=1.0.2');
 });
 app.on('window-all-closed',()=>app.quit());

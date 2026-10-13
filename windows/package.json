@@ -1,13 +1,13 @@
 {
   "name": "radha-movies",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Radha Movies by Diwash Bhatta",
   "author": "Diwash Bhatta",
   "main": "main.cjs",
   "private": true,
   "scripts": {
     "start": "electron .",
-    "package": "electron-packager . \"Radha Movies\" --platform=win32 --arch=x64 --out=build --overwrite",
+    "package": "electron-packager . \"Radha Movies\" --platform=win32 --arch=x64 --icon=icon.ico --out=build --overwrite",
     "prestart": "node prepare.cjs",
     "prepackage": "node prepare.cjs"
   },

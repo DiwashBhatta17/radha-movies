@@ -6,7 +6,7 @@ Website: https://radhamovies.netlify.app/
 
 ## Downloads
 
-[Download the latest preview release](https://github.com/DiwashBhatta17/radha-movies/releases/tag/v1.0.1-preview): Android APK and Windows x64 portable ZIP. These are preview builds; platform-specific verification limits are listed below.
+[Download the latest preview release](https://github.com/DiwashBhatta17/radha-movies/releases/tag/v1.0.2-preview): Android APK and Windows x64 portable ZIP. These are preview builds; platform-specific verification limits are listed below.
 
 ## Android
 
@@ -14,7 +14,7 @@ Transfer `Radha-Movies-Android.apk` to an Android 8 or newer phone and open it t
 
 The app loads the live website and rejects popup windows, external top-level navigation, and player downloads. It requires an internet connection.
 
-In fullscreen, swipe near the left edge to adjust brightness or near the right edge to adjust media volume. Double-tap left/right to request a 10-second seek. Seeking uses the video already playing and preserves fullscreen. Android System WebView must support document-start scripts; keep it updated. Fullscreen automatically opens in landscape, with Rotate and Exit controls. Gestures have compiled but have not been verified on a physical Android device.
+In fullscreen, swipe near the left edge to adjust brightness or near the right edge to adjust media volume. Double-tap left/right to request a 10-second seek. Seeking uses the video already playing and preserves fullscreen. Android System WebView must support document-start scripts; keep it updated. Fullscreen automatically opens in landscape; press Back or the fullscreen control to exit. Gestures have compiled but have not been verified on a physical Android device.
 
 ## Windows
 
@@ -53,3 +53,7 @@ Verification: Android compilation, APK signature/package metadata, search/progre
 Windows now permits fullscreen for the trusted Radha Movies and Vidy origins, with F11 and Escape support. Android removes fullscreen padding, hides system bars, opens in landscape, and restores the prior orientation on exit. Native 10-second seek controls change the existing video position instead of rebuilding the iframe. Popup blocking remains enabled.
 
 Tests: `node windows/prepare.cjs`, `node windows/policy-test.cjs`, `node native/player-controls.test.cjs`, and Android `gradlew.bat testDebugUnitTest`. Actual provider playback still needs verification on a physical phone and Windows desktop.
+
+## 1.0.2 matching branding and cleaner fullscreen
+
+Removed the Android Rotate/Exit overlay buttons and initial gesture banner. Back and the player controls still exit fullscreen. Website, Android, and Windows share a red/black theme and original Radha play monogram. Versioned assets refresh the styling without clearing watch history. Android gestures still show brief volume/brightness feedback.
